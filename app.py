@@ -19,8 +19,9 @@ MAX_WIDTH = 2000
 MAX_HEIGHT = 2000
 
 ALLOWED_ORIGINS = [
-    "*.test.it",
-    "pippo.test.com",
+    "*.pages.dev",
+    "*.simonelippolis.com",
+    "*.koolmoe.at",
     "localhost"
 ]
 

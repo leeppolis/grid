@@ -31,7 +31,7 @@
       formData.append('colore', colore);
       formData.append('n', n);
 
-      const response = await fetch('http://localhost:5000/griglia', {
+      const response = await fetch('http://grid.koolmoe.at/grid', {
         method: 'POST',
         body: formData
       });
