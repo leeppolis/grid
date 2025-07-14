@@ -59,8 +59,8 @@ def add_cors_headers(response):
         response.headers['Access-Control-Allow-Origin'] = origin
     return response
 
-@app.route('/griglia', methods=['POST'])
-def griglia():
+@app.route('/grid', methods=['POST'])
+def grid():
     origin = request.headers.get('Origin') or request.headers.get('Referer')
     if not is_allowed_origin(origin):
         return {"error": "Dominio non autorizzato"}, 403
