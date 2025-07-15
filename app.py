@@ -58,6 +58,12 @@ def grid():
 
     colore = request.form.get('colore')
     n = int(request.form.get('n', 0))
+    try:
+        line_width = int(request.form.get('width', 1))
+        if line_width < 1:
+            line_width = 1
+    except:
+        line_width = 1
 
     if colore not in COLOR_MAP:
         return {"error": "Colore non valido"}, 400
@@ -77,14 +83,14 @@ def grid():
     color = COLOR_MAP[colore]
 
     if n > 0:
-        step_x = width / n  # larghezza dei quadrati
-        num_rows = int(height / step_x)  # calcola righe per avere quadrati
+        step_x = width / n
+        num_rows = int(height / step_x)
         for i in range(1, n):
             x = int(i * step_x)
-            draw.line([(x, 0), (x, height)], fill=color)
+            draw.line([(x, 0), (x, height)], fill=color, width=line_width)
         for j in range(1, num_rows):
             y = int(j * step_x)
-            draw.line([(0, y), (width, y)], fill=color)
+            draw.line([(0, y), (width, y)], fill=color, width=line_width)
 
     output = io.BytesIO()
     image.save(output, format='PNG')

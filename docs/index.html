@@ -64,6 +64,7 @@
       </select>
     </label><br>
     <label>Number of columns: <input type="number" id="n" min="1" max="100" value="5"></label><br>
+    <label>Line width: <input type="number" id="w" min="1" max="10" value="1"></label><br>
     <button onclick="invia()">Invia</button>
 
     <h2>Risultato:</h2>
@@ -82,11 +83,13 @@
       const imageInput = document.getElementById('imageInput');
       const colore = document.getElementById('colore').value;
       const n = document.getElementById('n').value;
+      const w = document.getElementById('w').value;
 
       const formData = new FormData();
       formData.append('image', imageInput.files[0]);
       formData.append('colore', colore);
       formData.append('n', n);
+      formData.append('width', w);
 
       const response = await fetch('https://grid.koolmoe.at/grid', {
         method: 'POST',
