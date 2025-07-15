@@ -2,6 +2,7 @@ from flask import Flask, request, send_file, make_response
 from PIL import Image, ImageDraw
 import io
 import os
+import math
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
@@ -83,13 +84,15 @@ def grid():
     color = COLOR_MAP[colore]
 
     if n > 0:
-        step_x = width / n
-        num_rows = int(height / step_x)
-        for i in range(1, n):
-            x = int(i * step_x)
+        step = width / n
+        num_cols = n
+        num_rows = math.ceil(height / step)
+
+        for i in range(1, num_cols):
+            x = round(i * step)
             draw.line([(x, 0), (x, height)], fill=color, width=line_width)
         for j in range(1, num_rows):
-            y = int(j * step_x)
+            y = round(j * step)
             draw.line([(0, y), (width, y)], fill=color, width=line_width)
 
     output = io.BytesIO()
