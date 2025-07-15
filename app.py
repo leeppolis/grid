@@ -22,11 +22,13 @@ ALLOWED_ORIGIN = "https://grid.simonelippolis.com"
 @app.after_request
 def add_cors_headers(response):
     origin = request.headers.get('Origin')
-    if origin == ALLOWED_ORIGIN:
+    if origin != ALLOWED_ORIGIN:
+        return {"error": "Dominio non autorizzato"}, 403
+    if origin and origin == ALLOWED_ORIGIN:
         response.headers['Access-Control-Allow-Origin'] = origin
         response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-    return response
+        return response
 
 @app.before_request
 def handle_preflight():
@@ -38,8 +40,7 @@ def handle_preflight():
             response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
             return response
-        else:
-            return {"error": "Dominio non autorizzato"}, 403
+        return {"error": "Dominio non autorizzato"}, 403
 
 @app.route('/grid', methods=['POST'])
 def grid():
