@@ -55,8 +55,8 @@ def grid():
     image_file.seek(0, io.SEEK_END)
     file_size = image_file.tell()
     image_file.seek(0)
-    if file_size > 5 * 1024 * 1024:
-        return {"error": "File troppo grande. Massimo 5MB."}, 400
+    if file_size > 10 * 1024 * 1024:
+        return {"error": "File troppo grande. Massimo 10MB."}, 400
 
     colore = request.form.get('colore')
     n = int(request.form.get('n', 0))
