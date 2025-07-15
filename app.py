@@ -19,9 +19,8 @@ MAX_WIDTH = 2000
 MAX_HEIGHT = 2000
 
 ALLOWED_ORIGINS = [
-    "*.grid-8qz.pages.dev",
-    "*.pages.dev",
-    "*.simonelippolis.com",
+    "grid.simonelippolis.com",
+    "*.*.pages.dev",
     "*.koolmoe.at",
     "localhost"
 ]
