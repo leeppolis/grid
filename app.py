@@ -77,11 +77,14 @@ def grid():
     color = COLOR_MAP[colore]
 
     if n > 0:
-        step_x = width / n
-        step_y = height / n
+        step_x = width / n  # larghezza dei quadrati
+        num_rows = int(height / step_x)  # calcola righe per avere quadrati
         for i in range(1, n):
-            draw.line([(int(i * step_x), 0), (int(i * step_x), height)], fill=color)
-            draw.line([(0, int(i * step_y)), (width, int(i * step_y))], fill=color)
+            x = int(i * step_x)
+            draw.line([(x, 0), (x, height)], fill=color)
+        for j in range(1, num_rows):
+            y = int(j * step_x)
+            draw.line([(0, y), (width, y)], fill=color)
 
     output = io.BytesIO()
     image.save(output, format='PNG')
