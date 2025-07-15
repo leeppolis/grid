@@ -1,27 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Griglia Immagine</title>
+  <title>Grid generator for artists</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f0fbfa;
+      color: #444;
+      font-family: Helvetica, Arial, sans-serif;      
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .grid {
+      margin: 2rem;
+    }
+
+    @media screen and (min-width: 768px) {
+      .grid {
+        margin: 2rem auto;
+        max-width: 600px;
+      }
+    }
+
+    h1 {
+      font-weight: 200;
+      margin: 0;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .upload {
+      margin-bottom: 2rem;
+    }
+
+  </style>
 </head>
 <body>
-  <h1>Carica immagine e genera griglia</h1>
-  <input type="file" id="imageInput"><br>
-  <label>Colore: 
-    <select id="colore">
-      <option value="bianco">Bianco</option>
-      <option value="magenta">Magenta</option>
-      <option value="nero">Nero</option>
-      <option value="ciano">Ciano</option>
-    </select>
-  </label><br>
-  <label>Numero di quadrati (orizzontale): <input type="number" id="n" min="1" max="100"></label><br>
-  <button onclick="invia()">Invia</button>
+  <header class="grid">
+    <h1>Grid generator for artists</h1>
+  </header>
+  <section class="grid">
+    
+    <div class="error" style="display: none;">an error occurred while generating image</div>
+    
+    <div class="upload">
+      <input type="file" id="imageInput">
+    </div>
 
-  <h2>Risultato:</h2>
-  <img id="outputImage" style="max-width: 600px;">
 
+    <label>Grid color: 
+      <select id="colore">
+        <option value="bianco">White</option>
+        <option value="nero" selected>Black</option>
+        <option value="magenta">Magenta</option>      
+        <option value="ciano">Cyan</option>
+      </select>
+    </label><br>
+    <label>Number of columns: <input type="number" id="n" min="1" max="100" value="5"></label><br>
+    <button onclick="invia()">Invia</button>
+
+    <h2>Risultato:</h2>
+    <img id="outputImage" style="max-width: 600px;">
+    <div class="loading" style="display: none;">Loading...</div>
+  </section>
   <script>
+    const $loading = document.querySelector('.loading');
+    const $error = document.querySelector('.error');
     async function invia() {
+      $loading.style.display = 'block';
+      $error.style.display = 'none';
       const imageInput = document.getElementById('imageInput');
       const colore = document.getElementById('colore').value;
       const n = document.getElementById('n').value;
@@ -36,12 +90,12 @@
         mode: "cors",
         body: formData
       });
-
+      $loading.style.display = 'none';
       if (response.ok) {
         const blob = await response.blob();
         document.getElementById('outputImage').src = URL.createObjectURL(blob);
       } else {
-        alert('Errore nella generazione della griglia');
+        $error.style.display = 'block';
       }
     }
   </script>
