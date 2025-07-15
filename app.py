@@ -19,6 +19,7 @@ MAX_WIDTH = 2000
 MAX_HEIGHT = 2000
 
 ALLOWED_ORIGINS = [
+    "*.grid-8qz.pages.dev",
     "*.pages.dev",
     "*.simonelippolis.com",
     "*.koolmoe.at",
@@ -29,14 +30,15 @@ def is_allowed_origin(origin):
     if not origin:
         return False
     try:
-        hostname = urlparse(origin).hostname
+        parsed = urlparse(origin)
+        hostname = parsed.hostname or parsed.path
         if not hostname:
             return False
         for pattern in ALLOWED_ORIGINS:
             if fnmatch.fnmatch(hostname, pattern):
                 return True
-    except Exception:
-        return False
+    except Exception as e:
+        print("Errore in is_allowed_origin:", e)
     return False
 
 # Gestione CORS preflight
@@ -44,14 +46,14 @@ def is_allowed_origin(origin):
 def handle_preflight():
     if request.method == 'OPTIONS':
         origin = request.headers.get('Origin')
-        if is_allowed_origin(origin):
+        if not is_allowed_origin(origin):
+            return {"error": "Dominio non autorizzato"}, 403
+        else:
             response = make_response('', 204)
             response.headers['Access-Control-Allow-Origin'] = origin
             response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
             return response
-        else:
-            return {"error": "Dominio non autorizzato"}, 403
 
 @app.after_request
 def add_cors_headers(response):
