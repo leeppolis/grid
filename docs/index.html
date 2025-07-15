@@ -13,7 +13,7 @@
     body {
       background-color: #fefefe;
       color: #444;
-      font-family: Helvetica, Arial, sans-serif;      
+      font-family: Georgia, 'Times New Roman', Times, serif;      
     }
 
     * {
@@ -83,17 +83,15 @@
       <p class="note">JPG or PNG image only, 4000x4000px max, 10Mb max.</p>
     </div>
 
-
-    <label>Grid color: 
-      <select id="colore">
+    <div class="input">
+      <p>I to add a <label><input type="number" id="n" min="2" max="10" value="5"> columns</label> grid made of <label><input type="number" id="w" min="1" max="10" value="1">px</label> <select id="colore">
         <option value="bianco">White</option>
         <option value="nero" selected>Black</option>
         <option value="magenta">Magenta</option>      
         <option value="ciano">Cyan</option>
-      </select>
-    </label><br>
-    <label>Number of columns: <input type="number" id="n" min="1" max="100" value="5"></label><br>
-    <label>Line width: <input type="number" id="w" min="1" max="10" value="1"></label><br>
+      </select> lines.</p>
+    </div>
+
     <button onclick="invia()">Invia</button>
 
     <div class="loading" style="display: none;">Loading...</div>
