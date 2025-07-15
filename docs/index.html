@@ -26,13 +26,6 @@
       margin: 2rem;
     }
 
-    @media screen and (min-width: 768px) {
-      .grid {
-        margin: 2rem auto;
-        max-width: 860px;
-      }
-    }
-
     h1 {
       font-weight: 200;
       margin: 0;
@@ -52,7 +45,7 @@
     }
 
     .input {
-      font-size: 4rem;
+      font-size: 2rem;
       margin: 2rem o;
       padding: 2rem;
       text-align: center;
@@ -63,9 +56,9 @@
       border-bottom: 1px solid #2fa6ff;
       color: #2fa6ff;
       font-family: Georgia, 'Times New Roman', Times, serif;
-      font-size: 4rem;
+      font-size: 2rem;
       padding: 0;
-      width: 6rem;
+      width: 4rem;
       text-align: center;
 
     }
@@ -75,9 +68,9 @@
       border-bottom: 1px solid #2fa6ff;
       color: #2fa6ff;
       font-family: Georgia, 'Times New Roman', Times, serif;
-      font-size: 4rem;
+      font-size: 2rem;
       padding: 0;
-      width: 18rem;
+      width: 10rem;
       text-align: center;
     }
 
@@ -85,13 +78,13 @@
       background: transparent;
       border: 1px solid #2fa6ff;
       color: #2fa6ff;
+      cursor: pointer;
       font-family: Georgia, 'Times New Roman', Times, serif;
-      font-size: 4rem;
+      font-size: 2rem;
       font-weight: 700;
-      line-height: 4rem;;
-      height: 4rem;
+      line-height: 2rem;;
+      height: 2rem;
       padding: 0 1rem;
-      width: 18rem;
       text-align: center;
     }
 
@@ -114,6 +107,33 @@
 
     .note {
       font-style: italic;
+    }
+
+    @media screen and (min-width: 768px) {
+      .grid {
+        margin: 2rem auto;
+        max-width: 860px;
+      }
+      .input {
+        font-size: 4rem;
+      }
+
+      .input input[type="number"] {
+        font-size: 4rem;
+        width: 6rem;
+
+      }
+
+      .input select {
+        font-size: 4rem;
+        width: 18rem;
+      }
+
+      .input button {
+        font-size: 4rem;;
+        line-height: 4rem;;
+        height: 4rem;
+      }
     }
   </style>
 </head>
