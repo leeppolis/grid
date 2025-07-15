@@ -4,7 +4,7 @@ import io
 import os
 
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 5MB
+app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
 
 COLOR_MAP = {
     "bianco": (255, 255, 255),
@@ -13,8 +13,8 @@ COLOR_MAP = {
     "ciano": (0, 255, 255)
 }
 
-MAX_WIDTH = 2000
-MAX_HEIGHT = 2000
+MAX_WIDTH = 4000
+MAX_HEIGHT = 4000
 
 ALLOWED_ORIGIN = "https://grid.simonelippolis.com"
 
