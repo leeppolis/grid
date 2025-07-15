@@ -1,11 +1,12 @@
-from flask import Flask, request, send_file, make_response
+from flask import Flask, request, send_file, make_response, jsonify
 from PIL import Image, ImageDraw
 import io
 import os
 import math
 
+MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10MB
 app = Flask(__name__)
-app.config['MAX_CONTENT_LENGTH'] = 10 * 1024 * 1024  # 10MB
+app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 
 COLOR_MAP = {
     "bianco": (255, 255, 255),
@@ -22,13 +23,11 @@ ALLOWED_ORIGIN = "https://grid.simonelippolis.com"
 @app.after_request
 def add_cors_headers(response):
     origin = request.headers.get('Origin')
-    if origin != ALLOWED_ORIGIN:
-        return {"error": "Dominio non autorizzato"}, 403
-    if origin and origin == ALLOWED_ORIGIN:
+    if origin == ALLOWED_ORIGIN:
         response.headers['Access-Control-Allow-Origin'] = origin
         response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
         response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
-        return response
+    return response
 
 @app.before_request
 def handle_preflight():
@@ -40,23 +39,23 @@ def handle_preflight():
             response.headers['Access-Control-Allow-Methods'] = 'POST, OPTIONS'
             response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
             return response
-        return {"error": "Dominio non autorizzato"}, 403
+        return jsonify({"error": "Dominio non autorizzato"}), 403
 
 @app.route('/grid', methods=['POST'])
 def grid():
-    origin = request.headers.get('Origin') or request.headers.get('Referer')
-    if not origin or origin != ALLOWED_ORIGIN:
-        return {"error": "Dominio non autorizzato"}, 403
+    origin = request.headers.get('Origin')
+    if origin != ALLOWED_ORIGIN:
+        return jsonify({"error": "Dominio non autorizzato"}), 403
 
     if 'image' not in request.files:
-        return {"error": "Nessuna immagine inviata"}, 400
+        return jsonify({"error": "Nessuna immagine inviata"}), 400
 
     image_file = request.files['image']
     image_file.seek(0, io.SEEK_END)
     file_size = image_file.tell()
     image_file.seek(0)
-    if file_size > 10 * 1024 * 1024:
-        return {"error": "File troppo grande. Massimo 10MB."}, 400
+    if file_size > MAX_CONTENT_LENGTH:
+        return jsonify({"error": "File troppo grande. Massimo 10MB."}), 400
 
     colore = request.form.get('colore')
     n = int(request.form.get('n', 0))
@@ -68,18 +67,18 @@ def grid():
         line_width = 1
 
     if colore not in COLOR_MAP:
-        return {"error": "Colore non valido"}, 400
+        return jsonify({"error": "Colore non valido"}), 400
 
     try:
         image = Image.open(image_file).convert('RGB')
     except Exception:
-        return {"error": "Errore nella lettura dell'immagine"}, 400
+        return jsonify({"error": "Errore nella lettura dell'immagine"}), 400
 
     width, height = image.size
     if width > MAX_WIDTH or height > MAX_HEIGHT:
-        return {
+        return jsonify({
             "error": f"Immagine troppo grande. Massimo {MAX_WIDTH}x{MAX_HEIGHT}px."
-        }, 400
+        }), 400
 
     draw = ImageDraw.Draw(image)
     color = COLOR_MAP[colore]
