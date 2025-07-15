@@ -9,7 +9,7 @@
     }
 
     body {
-      background-color: #f0fbfa;
+      background-color: #e5fefe;
       color: #444;
       font-family: Helvetica, Arial, sans-serif;      
     }
@@ -25,7 +25,7 @@
     @media screen and (min-width: 768px) {
       .grid {
         margin: 2rem auto;
-        max-width: 600px;
+        max-width: 860px;
       }
     }
 
@@ -37,9 +37,24 @@
     }
 
     .upload {
+      aspect-ratio: 16 / 9;
+      background: #fff;
+      color: #444;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      border: 1px solid #444;
       margin-bottom: 2rem;
     }
 
+    .error {
+      background: #fff;
+      color: #cc0000;
+      padding: 1rem;
+      border: 1px solid #cc0000;
+    }
   </style>
 </head>
 <body>
@@ -48,7 +63,7 @@
   </header>
   <section class="grid">
     
-    <div class="error" style="display: none;">an error occurred while generating image</div>
+    <div class="error" style="display: none;">An error occurred while generating image</div>
     
     <div class="upload">
       <p>JPG or PNG image only, 4000x4000px max, 10Mb max.</p>
@@ -73,7 +88,11 @@
     <div class="loading" style="display: none;">Loading...</div>
 
     <h2>Legal</h2>
-    <p>Images are not saved anywhere on our server. Once you upload them, the script adds the grid and then deletes both the original file and the generated file which will be in your browser and nowhere else. If you want to check, <a href="https://github.com/leeppolis/grid">the source code is available here</a>.</p>
+    <p>
+      Images are not saved anywhere on our server. Once you upload them, the script adds the grid and then
+      removes both the original file and the generated file from memory, which will be in your browser
+      and nowhere else. If you want to check, <a href="https://github.com/leeppolis/grid">the source code
+      is available here</a>.</p>
   </section>
   <script>
     const $loading = document.querySelector('.loading');
