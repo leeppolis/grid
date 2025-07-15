@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5,user-scalable=1">
   <title>Grid generator for artists</title>
   <style>
     html, body {
@@ -55,6 +57,10 @@
       padding: 1rem;
       border: 1px solid #cc0000;
     }
+
+    .note {
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -66,8 +72,8 @@
     <div class="error" style="display: none;">An error occurred while generating image</div>
     
     <div class="upload">
-      <p>JPG or PNG image only, 4000x4000px max, 10Mb max.</p>
       <input type="file" id="imageInput">
+      <p class="note">JPG or PNG image only, 4000x4000px max, 10Mb max.</p>
     </div>
 
 
