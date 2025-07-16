@@ -155,15 +155,29 @@
     </div>
 
     <div class="input">
-      <p>I'd like to add a grid with <label><input type="number" id="n" min="2" max="10" value="5"> columns</label>, made of <label><input type="number" id="w" min="1" max="10" value="1">px</label> <select id="colore">
-        <option value="bianco">White</option>
-        <option value="nero" selected>Black</option>
-        <option value="magenta">Magenta</option>      
-        <option value="ciano">Cyan</option>
+      <p>I'd like to add a grid with <label><select id="n">
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option selected>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+      </select> columns</label>, made of <label><select id="w">
+        <option selected>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+      </select>px</label> <select id="c">
+        <option value="bianco">white</option>
+        <option value="nero" selected>black</option>
+        <option value="magenta">magenta</option>      
+        <option value="ciano">cyan</option>
       </select> lines. <button onclick="invia()">Please</button>.</p>
     </div>
-
-    
 
     <div class="loading" style="display: none;">Loading...</div>
 
@@ -175,10 +189,9 @@
 
     <h2>Legal</h2>
     <p>
-      Images are not saved anywhere on our server. Once you upload them, the script adds the grid and then
-      removes both the original file and the generated file from memory, which will be in your browser
-      and nowhere else. If you want to check, <a href="https://github.com/leeppolis/grid">the source code
-      is available here</a>.</p>
+      Images are never saved on our server. They are processed in memory and immediately discarded.  
+      You can review the full process in <a href="https://github.com/leeppolis/grid">the source code</a>.
+    </p>
   </section>
   <script>
     const $loading = document.querySelector('.loading');
@@ -190,14 +203,16 @@
       $error.style.display = 'none';
       document.getElementById('outputImage').src = '';
       const imageInput = document.getElementById('imageInput');
-      const colore = document.getElementById('colore').value;
+      const c = document.getElementById('c').value;
       const n = document.getElementById('n').value;
       const w = document.getElementById('w').value;
+
+      console.log('c', c, 'n', n, 'w', w);
 
       if (imageInput.files.length === 1) {
         const formData = new FormData();
         formData.append('image', imageInput.files[0]);
-        formData.append('colore', colore);
+        formData.append('colore', c);
         formData.append('n', n);
         formData.append('width', w);
 
