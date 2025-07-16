@@ -51,20 +51,8 @@
       text-align: center;
     }
 
-    .input input[type="number"] {
-      border: 0;
-      border-bottom: 1px solid #2fa6ff;
-      border-radius: 0;
-      color: #2fa6ff;
-      font-family: Georgia, 'Times New Roman', Times, serif;
-      font-size: 2rem;
-      padding: 0;
-      width: 4rem;
-      text-align: center;
-
-    }
-
     .input select {
+      appearance: base-select;
       background: transparent;
       border: 0;
       border-bottom: 1px solid #2fa6ff;
@@ -75,6 +63,11 @@
       padding: 0;
       width: 10rem;
       text-align: center;
+    }
+
+    .input select option {
+      color: #444;
+      font-size: 2rem;
     }
 
     .input button {
@@ -122,12 +115,6 @@
       }
       .input {
         font-size: 4rem;
-      }
-
-      .input input[type="number"] {
-        font-size: 4rem;
-        width: 6rem;
-
       }
 
       .input select {
