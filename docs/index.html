@@ -283,7 +283,7 @@
           n: 5,
           w: 1,
       }
-      
+
       const handleFileSelect = function(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -331,14 +331,15 @@
                 mode: "cors",
                 body: formData
             });
-            $loading.style.display = 'none';
             if (response.ok) {
                 const blob = await response.blob();
                 $result.innerHTML = `<img src="${URL.createObjectURL(blob)}" alt="Result Image" id="outputImage">`;
             } else {
                 $error.innerText = 'Please select a width between 1 and 5 pixels.';
                 $error.style.display = 'block';
+
             }
+            $loading.style.display = 'none';
         } catch (error) {
             console.error('Error:', error);
             $loading.style.display = 'none';
