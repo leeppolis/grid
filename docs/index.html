@@ -52,6 +52,25 @@
       text-align: center;
     }
 
+    .preview {
+      background: #fff;
+      display: none;
+      gap: 1rem;
+      grid-template-columns: 1fr 1fr;
+      padding: 1rem;
+      border: 1px solid #444;
+      margin: 2rem 0;
+    }
+
+    .preview img {
+        aspect-ratio: 1 / 1;
+        display: block;
+        height: auto;
+        max-width: 100%;
+        object-fit: contain;
+
+    }
+
     span.dropdown,
     span.input {
       border-bottom: 1px solid #2fa6ff;
@@ -65,17 +84,23 @@
     }
 
     span.dropdown .options {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
       background: #fff;
       border: 1px solid #2fa6ff;
+      display: none;
+      font-size: 1rem;
+      left: 0;
+      min-width: 3rem;
+      padding: .5rem;
+      position: absolute;
+      text-align: left;
+      top: 100%;
       z-index: 10;
     }
 
     span.dropdown .option {
-      cursor: pointer;
+        color: #444;
+        cursor: pointer;
+        display: block;
     }
 
     span.dropdown .option:hover {
@@ -104,6 +129,7 @@
     .error {
       background: #fff;
       color: #cc0000;
+      display: none;
       margin: 2rem 0;
       text-align: center;
       padding: 1rem;
@@ -112,6 +138,7 @@
 
     .loading {
       background: #fff;
+      display: none;
       margin: 2rem 0;
       text-align: center;
       padding: 1rem;
@@ -121,6 +148,12 @@
     .note {
       font-size: 1rem;
       font-style: italic;
+    }
+
+    .legal {
+        display: block;
+        font-size: 1rem;
+        margin-top: 6rem;
     }
 
     @media screen and (min-width: 768px) {
@@ -144,55 +177,94 @@
   <section class="grid">
     
     <div class="upload">
-      <input type="file" id="imageInput">
+      <input type="file" id="i">
       <p class="note">JPG or PNG image only, 4000x4000px max, 10Mb max.</p>
     </div>
 
     <div class="input">
       <p>I'd like to add a grid with 
-        <span contenteditable class="input" id="n">5</span>
+        <span class="dropdown" id="n">
+          <span class="label">5</span>
+          <span class="options">
+            <span class="option" data-value="2">2</span>
+            <span class="option" data-value="3">3</span>
+            <span class="option" data-value="4">4</span>
+            <span class="option selected" data-value="5">5</span>
+            <span class="option" data-value="6">6</span>
+            <span class="option" data-value="7">7</span>
+            <span class="option" data-value="8">8</span>
+            <span class="option" data-value="9">9</span>
+            <span class="option" data-value="10">10</span>
+          </span>
+        </span>
+
+        </span>
         columns, made of 
-        <span contenteditable class="input" id="w">1</span>
+        <span class="dropdown" id="w">
+          <span class="label">1</span>
+          <span class="options">
+            <span class="option selected" data-value="1">1</span>
+            <span class="option" data-value="2">2</span>
+            <span class="option" data-value="3">3</span>
+            <span class="option" data-value="4">4</span>
+            <span class="option" data-value="5">5</span>
+          </span>
+
+        </span>
         px
         <span class="dropdown" id="c">
-          <span class="selected">black</span>
-          <div class="options">
+          <span class="label">black</span>
+          <span class="options">
             <span class="option" data-value="bianco">white</span>
-            <span class="option" data-value="nero" selected>black</span>
+            <span class="option selected" data-value="nero">black</span>
             <span class="option" data-value="magenta">magenta</span>
             <span class="option" data-value="ciano">cyan</span>
-          </div>
+          </span>
         </span>
-        lines. <button onclick="invia()" id="submit">Please 👈</button>.</p>
+        lines. <button id="submit">Please 👈</button>.</p>
     </div>
 
-    <div class="loading" style="display: none;">Loading...</div>
+    <div class="loading" id="loading">Loading...</div>
+    <div class="error" id="error">Error</div>
 
-    <div class="result" style="display: none;">    
-      <div class="error" style="display: none;">An error occurred while generating image</div>
-      <img id="outputImage" style="max-width: 600px;">
+    <div class="preview" id="preview">
+        <div class="source" id="source"></div>
+        <div class="result" id="result"></div>
     </div>
     
-
-    <h2>Legal</h2>
-    <p>
-      Images are never saved on our server. They are processed in memory and immediately discarded.  
-      You can review the full process in <a href="https://github.com/leeppolis/grid">the source code</a>.
-    </p>
+    <div class="legal">
+        <p>
+            You can use this tool for free, without any attribution, for any purpose, including commercial use.
+            Just, please, do not abuse it. This page does not contain any tracker.<br />
+            Images are never saved on our server. They are processed in memory and immediately discarded.  
+            You can review the full process in <a href="https://github.com/leeppolis/grid">the source code</a>.<br />
+            Design and Development: <a href="https://simonelippolis.com">Simone Lippolis</a>.
+        </p>
+    </div>
   </section>
   <script>
-    const $loading = document.querySelector('.loading');
-    const $error = document.querySelector('.error');
-    const $result = document.querySelector('.result');
+    const $loading = document.querySelector('#loading');
+    const $error = document.querySelector('#error');
+    const $result = document.querySelector('#result');
+    const $source = document.querySelector('#source');
+    const $preview = document.querySelector('#preview');
+    const $submit = document.querySelector('#submit');
 
     const $n = document.querySelector('#n');
     const $w = document.querySelector('#w');
     const $c = document.querySelector('#c');
+    const $i = document.querySelector('#i');
 
     const $ln = document.querySelector('#ln');
     const $lw = document.querySelector('#lw');
     const $lc = document.querySelector('#lc');
     const $s = document.querySelector('#submit');
+
+    const data = {
+        c: 'nero',
+        n: 5,
+        w: 1,
+    }
 
     const colors = {
       'bianco': 'white',
@@ -201,9 +273,112 @@
       'ciano': 'cyan'
     };
     (() => {
+      const checkInputsAndSend = async () => {
+        if ($i.files.length === 0) {
+          $error.innerText = 'Please select an image.';
+          $error.style.display = 'block';
+          return;
+        }
+        if (data.n < 2 || data.n > 10) {
+          $error.innerText = 'Please select a number of columns between 2 and 10.';
+          $error.style.display = 'block';
+          return;
+        }
+        if (data.w < 1 || data.w > 5) {
+          $error.innerText = 'Please select a width between 1 and 5 pixels.';
+          $error.style.display = 'block';
+          return;
+        }
+
+        try {
+            console.log('c', data.c, 'n', data.n, 'w', data.w, 'i', i);
+            $loading.style.display = 'block';
+            const formData = new FormData();
+            formData.append('image', $i.files[0]);
+            formData.append('colore', data.c);
+            formData.append('n', data.n);
+            formData.append('width',data.w);
+
+            const response = await fetch('https://grid.koolmoe.at/grid', {
+                method: 'POST',
+                mode: "cors",
+                body: formData
+            });
+            $loading.style.display = 'none';
+            if (response.ok) {
+                const blob = await response.blob();
+                $result.innerHTML = `<img src="${URL.createObjectURL(blob)}" alt="Result Image" id="outputImage">`;
+            } else {
+                $error.innerText = 'Please select a width between 1 and 5 pixels.';
+                $error.style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            $loading.style.display = 'none';
+            $error.innerText = 'An error occurred while processing the image.';
+            $error.style.display = 'block';
+        }
+      };
+      const changeImage = (e) => {
+          $error.style.display = 'none';
+          const file = e?.target?.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              $preview.style.display = 'grid';
+              $source.innerHTML = `<img src="${event.target.result}" alt="Source Image" id="inputImage">`;
+            };
+            reader.readAsDataURL(file);
+          } else {
+            $preview.style.display = 'none';
+            $source.innerHTML = '';
+          }
+          $result.innerHTML = '';
+    };
+      const changeOption = (e, target) => {
+        $error.style.display = 'none';
+        const dropdown = e.target.closest('.dropdown');
+        const label = dropdown.querySelector('.label');
+        const value = e.target.getAttribute('data-value');
+        dropdown.querySelector('.selected')?.classList.remove('selected');
+        e.target.classList.add('selected');
+
+        label.innerText = e.target.innerText;
+        data[target] = value;
+      };
 
       const init = () => {
-      };
+        const optionsN = $n.querySelectorAll('.option');
+        const optionsC = $c.querySelectorAll('.option');
+        const optionsW = $w.querySelectorAll('.option');
+
+        optionsN.forEach(option => {
+          option.addEventListener('click', (e) => {
+            changeOption(e, 'n');
+          });
+        });
+
+        optionsC.forEach(option => {
+          option.addEventListener('click', (e) => {
+            changeOption(e, 'c');
+          });
+        });
+
+        optionsW.forEach(option => {
+          option.addEventListener('click', (e) => {
+            changeOption(e, 'w');
+          });
+        });
+
+        $i.addEventListener('change', (e) => {
+          changeImage(e);
+        });
+
+        $submit.addEventListener('click', (e) => {
+          e.preventDefault();
+          checkInputsAndSend();
+        });
+    };
 
       const ready = (fn) => {
         if (document.readyState !== 'loading') {
@@ -219,40 +394,40 @@
 
 
     
-    async function invia() {
-      $result.style.display = 'none';
-      $loading.style.display = 'block';
-      $error.style.display = 'none';
-      document.getElementById('outputImage').src = '';
-      const imageInput = document.getElementById('imageInput');
-      const c = document.getElementById('c').value;
-      const n = document.getElementById('n').value;
-      const w = document.getElementById('w').value;
+    // async function invia() {
+    //   $result.style.display = 'none';
+    //   $loading.style.display = 'block';
+    //   $error.style.display = 'none';
+    //   document.getElementById('outputImage').src = '';
+    //   const imageInput = document.getElementById('imageInput');
+    // //   const c = document.getElementById('c').value;
+    // //   const n = document.getElementById('n').value;
+    // //   const w = document.getElementById('w').value;
 
-      console.log('c', c, 'n', n, 'w', w);
+    //   console.log('c', c, 'n', n, 'w', w);
 
-      if (imageInput.files.length === 1) {
-        const formData = new FormData();
-        formData.append('image', imageInput.files[0]);
-        formData.append('colore', c);
-        formData.append('n', n);
-        formData.append('width', w);
+    //   if (imageInput.files.length === 1) {
+    //     const formData = new FormData();
+    //     formData.append('image', imageInput.files[0]);
+    //     formData.append('colore', c);
+    //     formData.append('n', n);
+    //     formData.append('width', w);
 
-        const response = await fetch('https://grid.koolmoe.at/grid', {
-          method: 'POST',
-          mode: "cors",
-          body: formData
-        });
-        $loading.style.display = 'none';
-        $result.style.display = 'block';
-        if (response.ok) {
-          const blob = await response.blob();
-          document.getElementById('outputImage').src = URL.createObjectURL(blob);
-        } else {
-          $error.style.display = 'block';
-        }
-      }
-    }
+    //     const response = await fetch('https://grid.koolmoe.at/grid', {
+    //       method: 'POST',
+    //       mode: "cors",
+    //       body: formData
+    //     });
+    //     $loading.style.display = 'none';
+    //     $result.style.display = 'block';
+    //     if (response.ok) {
+    //       const blob = await response.blob();
+    //       document.getElementById('outputImage').src = URL.createObjectURL(blob);
+    //     } else {
+    //       $error.style.display = 'block';
+    //     }
+    //   }
+    // }
   </script>
 </body>
 </html>
