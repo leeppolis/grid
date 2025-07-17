@@ -35,15 +35,28 @@
     }
 
     .upload {
+      align-items: center;
       aspect-ratio: 2 / 0.5;
       background: #fff;
+      border: 1px solid #444;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      padding: 1rem;
-      border: 1px solid #444;
       margin: 2rem 0;
+      overflow: hidden;
+      padding: 1rem;
+      position: relative;
+    }
+
+    .upload input {
+      left: -1000px;
+      position: absolute;
+      top: -1000px;
+    }
+
+    .upload.dragover {
+        background: #f0f0f0;
+        border-color: #2fa6ff;
     }
 
     .input {
@@ -146,8 +159,9 @@
     }
 
     .note {
-      font-size: 1rem;
+      font-size: .85rem;
       font-style: italic;
+      text-align: center;
     }
 
     .legal {
@@ -176,10 +190,12 @@
   </header>
   <section class="grid">
     
-    <div class="upload">
+    <label class="upload" id="upload">
       <input type="file" id="i">
-      <p class="note">JPG or PNG image only, 4000x4000px max, 10Mb max.</p>
-    </div>
+      <p class="note">
+        Drag your image here or click to select a file.<br />
+        JPG or PNG image only, 4000x4000px max, 10Mb max.</p>
+    </label>
 
     <div class="input">
       <p>I'd like to add a grid with 
@@ -243,36 +259,54 @@
     </div>
   </section>
   <script>
-    const $loading = document.querySelector('#loading');
-    const $error = document.querySelector('#error');
-    const $result = document.querySelector('#result');
-    const $source = document.querySelector('#source');
-    const $preview = document.querySelector('#preview');
-    const $submit = document.querySelector('#submit');
-
-    const $n = document.querySelector('#n');
-    const $w = document.querySelector('#w');
-    const $c = document.querySelector('#c');
-    const $i = document.querySelector('#i');
-
-    const $ln = document.querySelector('#ln');
-    const $lw = document.querySelector('#lw');
-    const $lc = document.querySelector('#lc');
-    const $s = document.querySelector('#submit');
-
-    const data = {
-        c: 'nero',
-        n: 5,
-        w: 1,
-    }
-
-    const colors = {
-      'bianco': 'white',
-      'nero': 'black',
-      'magenta': 'magenta',
-      'ciano': 'cyan'
-    };
     (() => {
+      const $loading = document.querySelector('#loading');
+      const $error = document.querySelector('#error');
+      const $result = document.querySelector('#result');
+      const $source = document.querySelector('#source');
+      const $preview = document.querySelector('#preview');
+      const $submit = document.querySelector('#submit');
+      const $upload = document.querySelector('#upload');
+
+      const $n = document.querySelector('#n');
+      const $w = document.querySelector('#w');
+      const $c = document.querySelector('#c');
+      const $i = document.querySelector('#i');
+
+      const $ln = document.querySelector('#ln');
+      const $lw = document.querySelector('#lw');
+      const $lc = document.querySelector('#lc');
+      const $s = document.querySelector('#submit');
+
+      const data = {
+          c: 'nero',
+          n: 5,
+          w: 1,
+      }
+
+      const colors = {
+        'bianco': 'white',
+        'nero': 'black',
+        'magenta': 'magenta',
+        'ciano': 'cyan'
+      };
+      const handleFileSelect = function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+          $i.files = files;
+          changeImage({ target: $i });
+        }
+        $upload.classList.remove('dragover');
+      };
+
+      const handleDragOver = function(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy'; 
+        $upload.classList.add('dragover');
+      };
       const checkInputsAndSend = async () => {
         if ($i.files.length === 0) {
           $error.innerText = 'Please select an image.';
@@ -291,7 +325,6 @@
         }
 
         try {
-            console.log('c', data.c, 'n', data.n, 'w', data.w, 'i', i);
             $loading.style.display = 'block';
             const formData = new FormData();
             formData.append('image', $i.files[0]);
@@ -370,6 +403,9 @@
           });
         });
 
+        $upload.addEventListener('dragover', handleDragOver, false);
+        $upload.addEventListener('drop', handleFileSelect, false);
+
         $i.addEventListener('change', (e) => {
           changeImage(e);
         });
@@ -390,44 +426,6 @@
 
      ready(init);
     })();
-
-
-
-    
-    // async function invia() {
-    //   $result.style.display = 'none';
-    //   $loading.style.display = 'block';
-    //   $error.style.display = 'none';
-    //   document.getElementById('outputImage').src = '';
-    //   const imageInput = document.getElementById('imageInput');
-    // //   const c = document.getElementById('c').value;
-    // //   const n = document.getElementById('n').value;
-    // //   const w = document.getElementById('w').value;
-
-    //   console.log('c', c, 'n', n, 'w', w);
-
-    //   if (imageInput.files.length === 1) {
-    //     const formData = new FormData();
-    //     formData.append('image', imageInput.files[0]);
-    //     formData.append('colore', c);
-    //     formData.append('n', n);
-    //     formData.append('width', w);
-
-    //     const response = await fetch('https://grid.koolmoe.at/grid', {
-    //       method: 'POST',
-    //       mode: "cors",
-    //       body: formData
-    //     });
-    //     $loading.style.display = 'none';
-    //     $result.style.display = 'block';
-    //     if (response.ok) {
-    //       const blob = await response.blob();
-    //       document.getElementById('outputImage').src = URL.createObjectURL(blob);
-    //     } else {
-    //       $error.style.display = 'block';
-    //     }
-    //   }
-    // }
   </script>
 </body>
 </html>
