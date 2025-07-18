@@ -337,7 +337,7 @@
                 const blob = await response.blob();
                 $result.innerHTML = `<img src="${URL.createObjectURL(blob)}" alt="Result Image" id="outputImage">`;
             } else {
-                $error.innerText = 'Please select a width between 1 and 5 pixels.';
+                $error.innerText = 'An error occurred while processing the image.';
                 $error.style.display = 'block';
 
             }
